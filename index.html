@@ -9,5 +9,34 @@
       <title>Port Of Folios</title>
   </head>
   <body>
+    <div id="out"></div>
+    <textarea id="in" oninput="updateOut(event)"></textarea>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.7/marked.min.js"></script>
+    <script>
+      let input = document.querySelector('#in');
+      let output = document.querySelector('#out');
+      let debounce = null;  
+      marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+        });        
+
+        function updateOut (event) {
+            output.innerHTML = marked(event.target.value);
+
+            clearTimeout(debounce);
+            debounce = setTimeout(function () {
+                localStorage.setItem('text', event.target.value);
+            }, 300);
+        }
+       input.value = initialText;
+       output.innerHTML = marked(initialText);
+    </script>
   </body>
 </html>
