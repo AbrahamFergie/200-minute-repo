@@ -13,9 +13,10 @@
     <textarea id="in" oninput="updateOut(event)"></textarea>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.7/marked.min.js"></script>
     <script>
-      let input = document.querySelector('#in');
-      let output = document.querySelector('#out');
-      let debounce = null;  
+      let input = document.querySelector('#in'),
+          output = document.querySelector('#out'),
+          debounce = null,
+          windowViewText = window.outerWidth > 600 ? "To Your Right" : "Below"
       marked.setOptions({
             renderer: new marked.Renderer(),
             gfm: true,
@@ -26,7 +27,6 @@
             smartLists: true,
             smartypants: false
         });        
-
         function updateOut (event) {
             output.innerHTML = marked(event.target.value);
 
@@ -35,8 +35,44 @@
                 localStorage.setItem('text', event.target.value);
             }, 300);
         }
-       input.value = initialText;
-       output.innerHTML = marked(initialText);
+        let initialText = localStorage.getItem('text') || `
+# Hello, and Welcome
+### Abraham Ferguson, Software Developer
+##### This Site Is Written Completeley In Markdown Code That You Can See ${windowViewText}
+####  [Resume](https://docs.google.com/document/d/1bqzBbETxhOW3gUdFJTNZT4aNmjmbXrcLlfE26E9WYDA/edit?usp=sharing)
+___
+
+#### Here Are Some Of My Open Source Contributions:
+![LG-logo](http://learncapital.com/wp-content/uploads/2017/07/Learners-Guild.png)
+
+  - __Learning Operating System__
+    - A professional collective for aspiring web developers. We work collaboratively with the guidance and mentorship of senior engineers on web applications to develop as software engineers, including contributions to open source projects.
+    - __Technologies Used__: React/Redux, GraphQL, RethinkDB
+    - [LearnersGuild/echo](https://github.com/LearnersGuild/echo/pull/1029)
+      -  Informs Member That Their Phase has Changed
+    - [LearnersGuild/echo](https://github.com/LearnersGuild/echo/pull/1046)
+      - Notifies Moderator Of Incorrect Action Through Slack API
+    - [LearnersGuild/echo](https://github.com/LearnersGuild/game/pull/878)
+      - Added Filtered Data Tab To Display Coaches
+  - __Prrr__
+    - Prrr was a unique tool that put a hard focus on everyone reviewing each others code such that all the varied concept implementation from the assortment of selected projects was able to circulate and be shared and considered by everyone.
+    - [LearnersGuild/Prrr](https://github.com/LearnersGuild/prrr/pull/76)
+      - Allows the logged in user to see new pull-requests that are in need of review.
+___
+#### Cool React BlackJack Game:
+![blackjack-logo](https://af-portfolio.herokuapp.com/img/portfolio/my-blackjack-start-screen.png)
+[Repository](https://github.com/abrahamfergie/myBlackjack) | [Play-Me](https://af-blackjack.herokuapp.com)
+___`;  
+      input.value = initialText;
+      output.innerHTML = marked(initialText);
+      let links = document.getElementsByTagName("a");
+      for(let i = 0; i < links.length; i++){                
+         if (links[i].hostname != window.location.hostname) {
+            links[i].target = '_blank';
+         } 
+      }
+      console.log("Hello, I see you there, feel free to peruse as you please.")
+      console.log("Making this site was a lot of fun, it is my take on a simple but unique Portfolio Site. I challenged myself to not use newer technologies such as media queries, I instead used a css trick called the fab four that allows for a reliable mobile responsive view.")   
     </script>
   </body>
 </html>
